@@ -1,0 +1,298 @@
+<div class="bg-orbs" aria-hidden="true">
+  <span class="orb orb-1"></span>
+  <span class="orb orb-2"></span>
+  <span class="orb orb-3"></span>
+</div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<div class="scroll-progress" [style.width.%]="progress()"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top nav-glass" [class.scrolled]="scrolled()">
+  <div class="container">
+    <a class="navbar-brand brand" href="#home" (click)="go('home', $event)">
+      <span class="brand-mark">S</span><span class="brand-text">elvasakthi<span class="dot">.</span></span>
+    </a>
+    <button class="navbar-toggler border-0 shadow-none" type="button" (click)="toggleMenu()" aria-label="Toggle navigation">
+      <i class="bi" [class.bi-list]="!menuOpen()" [class.bi-x-lg]="menuOpen()"></i>
+    </button>
+    <div class="collapse navbar-collapse" [class.show]="menuOpen()">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+        @for (l of navLinks; track l.id) {
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeSection() === l.id" [href]="'#' + l.id" (click)="go(l.id, $event)">{{ l.label }}</a>
+          </li>
+        }
+        <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+          <a class="btn btn-glow btn-sm px-4" [href]="'mailto:' + profile.email">Hire me</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section id="home" class="hero d-flex align-items-center">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7 order-2 order-lg-1">
+          <p class="eyebrow reveal"><span class="pulse"></span> Available for new opportunities</p>
+          <h1 class="hero-title reveal">
+            Hi, I'm <span class="grad">{{ profile.firstName }}</span><span class="grad-dim"> N</span>
+          </h1>
+          <h2 class="hero-role reveal">
+            <span class="mono">&lt;</span>{{ typed() }}<span class="caret">|</span><span class="mono"> /&gt;</span>
+          </h2>
+          <p class="hero-lead reveal">
+            I build fast, secure and scalable web apps with
+            <strong>Angular</strong>, <strong>ASP.NET Core</strong> and <strong>MySQL</strong>,
+            from clean REST APIs to polished interfaces.
+          </p>
+          <div class="d-flex flex-wrap gap-3 mt-4 reveal">
+            <a class="btn btn-glow btn-lg px-4" href="#projects" (click)="go('projects', $event)">
+              View my work <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+            <a class="btn btn-ghost btn-lg px-4" href="#contact" (click)="go('contact', $event)">
+              <i class="bi bi-chat-dots me-2"></i>Let's talk
+            </a>
+          </div>
+          <div class="d-flex gap-3 mt-4 reveal">
+            <a class="social" [href]="profile.linkedin" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+            <a class="social" [href]="'mailto:' + profile.email" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+            <a class="social" [href]="'https://wa.me/' + profile.phoneRaw" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+            <a class="social" [href]="'tel:+' + profile.phoneRaw" aria-label="Phone"><i class="bi bi-telephone-fill"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-5 order-1 order-lg-2 d-flex justify-content-center reveal">
+          <div class="avatar-wrap">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+           <div class="avatar"><img src="images/Selvasakthi_Profilepic.jpeg" alt="Selvasakthi N"></div>
+            <div class="float-chip chip-a"><i class="bi bi-code-slash"></i> ASP.NET Core</div>
+            <div class="float-chip chip-b"><i class="bi bi-braces"></i> Angular</div>
+            <div class="float-chip chip-c"><i class="bi bi-database"></i> MySQL</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3 mt-5 pt-lg-4">
+        @for (s of stats; track s.label) {
+          <div class="col-6 col-md-3 reveal">
+            <div class="stat glass">
+              <div class="stat-value">{{ s.value }}</div>
+              <div class="stat-label">{{ s.label }}</div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <a class="scroll-hint" href="#about" (click)="go('about', $event)" aria-label="Scroll to about"><i class="bi bi-chevron-double-down"></i></a>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <!-- <span class="kicker">01 · About</span> -->
+        <h2>Building things that <span class="grad">work</span> and last</h2>
+      </div>
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7 reveal">
+          <div class="glass p-4 p-md-5 h-100">
+            <p class="lead-text">{{ profile.summary }}</p>
+            <p class="muted mb-4">
+              I enjoy owning features end to end: designing the database, shaping the API contract,
+              and wiring it into a clean Angular UI. In production I have tracked down async deadlocks,
+              timezone bugs and email delivery problems, and I like leaving systems more stable than I found them.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+              @for (t of techTags; track t) {
+                <span class="tag"><i class="tag-ico" [class]="tagIcon(t)"></i>{{ t }}</span>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-5 reveal">
+          <div class="glass p-4 p-md-5 h-100">
+            <h3 class="h5 mb-4"><i class="bi bi-compass me-2 accent"></i>What I love</h3>
+            <ul class="list-unstyled interest-list mb-0">
+              @for (i of interests; track i.text) {
+                <li><i class="bi" [class]="i.icon"></i><span>{{ i.text }}</span></li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section">
+    <div class="container">
+            <div class="skill-tabs reveal" role="tablist">
+        @for (t of skillTabs; track t) {
+          <button type="button" class="skill-tab" role="tab" [class.active]="skillTab() === t" (click)="skillTab.set(t)">
+            {{ t }} <span class="count">{{ skillCount(t) }}</span>
+          </button>
+        }
+      </div>
+
+      <div class="skill-grid reveal">
+        @for (s of visibleSkills(); track s.name; let i = $index) {
+          <div class="skill-tile" [style.--d]="i * 60 + 'ms'">
+            <div class="sk-ring" [style.--p]="s.level"><span class="sk-code">{{ s.code }}</span></div>
+            <div class="sk-info">
+              <div class="sk-name">{{ s.name }}</div>
+              <div class="sk-meta"><span class="sk-label">{{ s.label }}</span><span class="sk-pct">{{ s.level }}%</span></div>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          @for (t of techTags; track t) { <span>{{ t }}</span> }
+          @for (t of techTags; track t) { <span>{{ t }}</span> }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <!-- <span class="kicker">03 · Experience</span> -->
+        <h2>Where I've <span class="grad">worked</span></h2>
+      </div>
+      <div class="timeline">
+        @for (e of experience; track e.company) {
+          <div class="t-item reveal">
+            <span class="t-dot" [class.live]="e.current"></span>
+            <div class="glass p-4 p-md-5">
+              <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+                <div>
+                  <h3 class="h4 mb-1">{{ e.role }}</h3>
+                  <div class="accent fw-semibold">{{ e.company }}</div>
+                </div>
+                <span class="period"><i class="bi bi-calendar3 me-2"></i>{{ e.period }}</span>
+              </div>
+              <ul class="check-list mb-0">
+                @for (p of e.points; track p) {
+                  <li>{{ p }}</li>
+                }
+              </ul>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="row g-4 mt-2">
+        <div class="col-lg-6 reveal">
+          <div class="glass p-4 p-md-5 h-100 d-flex gap-3">
+            <div class="icon-badge flex-shrink-0"><i class="bi bi-mortarboard-fill"></i></div>
+            <div>
+              <div class="kicker mb-2">Education</div>
+              <h3 class="h5">{{ education.degree }}</h3>
+              <p class="muted mb-2">{{ education.school }}</p>
+              <span class="tag me-2">{{ education.period }}</span>
+              <span class="tag tag-accent">GPA {{ education.gpa }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 reveal">
+          <div class="glass p-4 p-md-5 h-100 d-flex gap-3">
+            <div class="icon-badge flex-shrink-0"><i class="bi bi-lightning-charge-fill"></i></div>
+            <div>
+              <div class="kicker mb-2">Currently</div>
+              <h3 class="h5">Shipping client products at E2o Technologies</h3>
+              <p class="muted mb-0">Working across Angular frontends and ASP.NET Core backends while sharpening my frontend craft.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <!-- <span class="kicker">04 · Projects</span> -->
+        <h2>Things I've <span class="grad">built</span></h2>
+      </div>
+      <div class="row g-4">
+        @for (p of projects; track p.name) {
+          <div class="col-md-6 col-xl-4 reveal">
+            <article class="glass project h-100">
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="icon-badge"><i class="bi" [class]="p.icon"></i></div>
+                @if (p.status) {
+                  <span class="status" [class.live]="p.status === 'Live' || p.status === 'Ongoing'">{{ p.status }}</span>
+                }
+              </div>
+              <h3 class="h5 mb-1">{{ p.name }}</h3>
+              <div class="muted small mb-3">{{ p.type }}</div>
+              <p class="mb-3">{{ p.desc }}</p>
+              <ul class="check-list small mb-3">
+                @for (pt of p.points; track pt) {
+                  <li>{{ pt }}</li>
+                }
+              </ul>
+              <div class="d-flex flex-wrap gap-2 mb-3 mt-auto">
+                @for (t of p.tech; track t) {
+                  <span class="tag tag-sm">{{ t }}</span>
+                }
+              </div>
+              @if (p.link) {
+                <a class="proj-link" [href]="p.link" target="_blank" rel="noopener">
+                  {{ p.linkLabel }} <i class="bi bi-arrow-up-right"></i>
+                </a>
+              }
+            </article>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section pb-5">
+    <div class="container">
+      <div class="glass cta text-center reveal">
+        <!-- <span class="kicker">05 · Contact</span> -->
+        <h2 class="mt-2">Let's build something <span class="grad">great</span> together</h2>
+        <p class="muted mx-auto mb-4" style="max-width: 560px">
+          Have a project, an opportunity or just want to say hi? My inbox is always open.
+        </p>
+        <a class="btn btn-glow btn-lg px-5" [href]="'mailto:' + profile.email">
+          <i class="bi bi-envelope-paper me-2"></i>Say hello
+        </a>
+        <div class="row g-3 mt-4 justify-content-center">
+          <div class="col-md-4">
+            <a class="contact-tile" [href]="'mailto:' + profile.email"><i class="bi bi-envelope"></i><span>{{ profile.email }}</span></a>
+          </div>
+          <div class="col-md-4">
+            <a class="contact-tile" [href]="'tel:+' + profile.phoneRaw"><i class="bi bi-telephone"></i><span>{{ profile.phone }}</span></a>
+          </div>
+          <div class="col-md-4">
+            <a class="contact-tile" [href]="profile.linkedin" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i><span>LinkedIn</span></a>
+          </div>
+        </div>
+        <p class="muted small mt-4 mb-0"><i class="bi bi-geo-alt me-1"></i>{{ profile.location }}</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+    <span class="muted small">© {{ year }} {{ profile.name }}. All rights reserved.</span>
+    <span class="muted small">Built with Angular &amp; Bootstrap</span>
+  </div>
+</footer>
+
+<button class="to-top" [class.show]="showTop()" (click)="go('home')" aria-label="Back to top">
+  <i class="bi bi-arrow-up"></i>
+</button>
